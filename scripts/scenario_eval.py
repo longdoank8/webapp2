@@ -827,7 +827,7 @@ def read_scn_file(map, ob):
     # remmeber curr dir
     remember_path = os.path.abspath(os.curdir)
     # change to map dir
-    os.chdir("../../../../simulator_setup/scenarios/eval/")
+    os.chdir("../simulator_setup/scenarios/eval/")
     json_path = os.path.abspath(os.curdir)
     # move back to eval path
     os.chdir(remember_path)
