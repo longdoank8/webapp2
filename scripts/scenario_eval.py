@@ -99,7 +99,7 @@ class newBag():
             # remmeber curr dir
             remember_path = os.path.abspath(os.curdir)
             # change to map dir
-            os.chdir("../../../../simulator_setup/maps/"+map)
+            os.chdir("../simulator_setup/maps/"+map)
             path_map = os.path.abspath(os.curdir)
             # move back to eval path
             os.chdir(remember_path)
