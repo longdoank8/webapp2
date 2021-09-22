@@ -890,10 +890,10 @@ def eval_cfg(cfg_file, filetype):
         # plot file name
         cfg_folder = cfg_file
         # cfg_folder = cfg_folder.replace(".yaml","")
-        if not os.path.exists('webapp2/plots/' + cfg_folder):
+        if not os.path.exists('../plots/' + cfg_folder):
             os.mkdir('../plots/' + cfg_folder)
 
-        plot_file        = 'webapp2/plots/' + cfg_folder + "/" + curr_figure + "." + filetype
+        plot_file        = '../plots/' + cfg_folder + "/" + curr_figure + "." + filetype
         # plot_file_exists = os.path.isfile(plot_file)
         plot_file_exists = False
         # print(curr_figure)
