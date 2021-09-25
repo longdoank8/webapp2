@@ -28,6 +28,10 @@ import gplan_analysis as gplan
 matplotlib.rcParams.update({'font.size': 15})
 #
 from termcolor import colored, cprint
+from flask import Flask
+
+app = Flask(__name__)
+
 class newBag():
     def __init__(self, planner, file_name, bag_name):
 
@@ -838,7 +842,7 @@ def read_scn_file(map, ob):
             jf = file
     # read file
     with open(json_path+"/"+jf, 'r') as myfile:
-        data=myfile.read()
+        data= myfile.read()
     obj = json.loads(data)
 
     # json to dict
@@ -1037,7 +1041,8 @@ def run(cfg_file, filetype):
     #rospy.spin()
 
 if __name__=="__main__":
-    newbag.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
+    
+    app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
 
     try:
         yml_file = sys.argv[1]
