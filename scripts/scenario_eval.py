@@ -1037,6 +1037,7 @@ def run(cfg_file, filetype):
     #rospy.spin()
 
 if __name__=="__main__":
+    newbag.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
 
     try:
         yml_file = sys.argv[1]
