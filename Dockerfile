@@ -39,7 +39,7 @@ RUN apt-get install wget
 RUN apt-get install -y software-properties-common
 RUN apt-get install wget
 
-RUN mkdir testbags
+
 RUN git clone https://github.com/longdoank8/webapp2.git
 
 
@@ -50,11 +50,16 @@ RUN git clone https://github.com/longdoank8/webapp2.git
 
 
 WORKDIR /webapp2/scripts
+RUN mkdir testbags
 RUN pip3 install termcolor
 RUN pip3 install importlib-resources
-RUN pip3 install bagpy
+RUN pip3 install bagpy 
+
+RUN pip3 install \
+    Flask \
+    gunicorn  
 
 EXPOSE 8080
-#CMD ["/bin/bash", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
 
-CMD ["python3", "scenario_eval.py", "SRL_test.yml", "png"]
+#CMD ["python3", "scenario_eval.py", "SRL_test.yml", "png"]
+#CMD exec gunicorn --bind 0.0.0.0:8080 --workers 1 --threads 8 --timeout 0 plot:app
