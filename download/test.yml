@@ -1,0 +1,38 @@
+"1":
+  default_cfg:
+    plot_trj: "1"
+    plot_zones: "1"
+    plot_obst: 1
+    plot_collisions: 1
+    plot_grid: "0"
+    plot_sm: "0"
+    plot_gp: "0"
+    plot_subgoals: 0
+  map:
+    "1":
+      legendName: "1"
+      plannerModelName: "1"
+      lineStyle: ergerrwehregergerqg
+    "2":
+      legendName: ergeg
+      plannerModelName: aegae
+      lineStyle: egge
+"2":
+  default_cfg:
+    plot_trj: "0"
+    plot_zones: 0
+    plot_obst: "0"
+    plot_collisions: "0"
+    plot_grid: "1"
+    plot_sm: "1"
+    plot_gp: "1"
+    plot_subgoals: "1"
+  map:
+    "1":
+      legendName: egregegreg
+      plannerModelName: ergegerg
+      lineStyle: egergeg
+    "2":
+      legendName: egegeg
+      plannerModelName: egerger
+      lineStyle: argagreag
