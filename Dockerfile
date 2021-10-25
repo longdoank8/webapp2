@@ -54,6 +54,7 @@ RUN mkdir testbags
 RUN pip3 install termcolor
 RUN pip3 install importlib-resources
 RUN pip3 install bagpy 
+RUN pip3 install pyrebase
 
 RUN pip3 install \
     Flask \
