@@ -1,4 +1,20 @@
-map1_obs10_vel02plot_1:
+default_cfg:
+    plot_trj:        1      # plot agent trajectory
+    plot_zones:      0        # plot collision zones
+    plot_grid:       0        # zone grid
+    plot_obst:       1       # plot obstacles (start, end, direction)
+    plot_collisions: 0       # plot a circle where agent collided
+    plot_sm:         1        # plot static map
+    plot_gp:         0        # plot global plan
+    plot_subgoals:   0        # plot subgoals
+    folder:          "run_test/" # folder containing the planners
+    map_origin:
+        x: -6
+        y: -6    
+
+
+
+map1_obs10_vel02_plot_1:
   default_cfg:
     plot_trj: 1
     plot_zones: "0"
@@ -19,7 +35,7 @@ map1_obs10_vel02plot_1:
     cadrl_ss:
       plannerModelName: cadrl
       lineStyle: tab:grey,-.
-map1_obs10_vel02plot_2:
+map1_obs10_vel02_plot_2:
   default_cfg:
     plot_trj: 1
     plot_zones: 0

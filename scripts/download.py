@@ -26,7 +26,9 @@ path_on_cloud = "dataFolder/SRL_test.yml"
 storage.child(path_on_cloud).download("SRL_test.yml")
 
 
-
+path_local2 = "../bags/scenarios/run_test/mpc/"
+path_on_cloud2 = "userID4321/mpc/map0_obs30_vel03_mpc.bag"
+storage.child(path_on_cloud2).download(path_local2 + "/map0_obs30_vel03_mpc.bag")
 
 
 #datadir = '../download'
