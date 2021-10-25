@@ -60,6 +60,7 @@ RUN pip3 install \
     Flask \
     gunicorn  
 
+CMD ["python3", "server.py"]
 CMD ["python3", "download.py"]
 CMD ["python3", "scenario_eval.py", "SRL_test.yml", "png"]
 CMD ["python3", "upload.py"]
