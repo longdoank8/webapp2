@@ -28,7 +28,7 @@ import gplan_analysis as gplan
 matplotlib.rcParams.update({'font.size': 15})
 #
 from termcolor import colored, cprint
-from flask import Flask
+from flask import Flask, jsonify
 import pyrebase
 
 
@@ -1039,10 +1039,14 @@ def getMap(msg):
 
 @app.route('/')
 def hello():
-   target = os.environ.get('Hello')
-   return 'Hello {}! \n'.format(target)
-
-
+    return jsonify(hello='world')
+    
+@app.after_request
+def after_request(response):        
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response 
 
 
 
@@ -1080,6 +1084,8 @@ def run():
     fancy_print("Evaluation finished: " + cfg_file, 1)
 
     return 'plotted everything'
+    
+
 
 
     #rospy.spin()

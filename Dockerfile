@@ -55,13 +55,14 @@ RUN pip3 install termcolor
 RUN pip3 install importlib-resources
 RUN pip3 install bagpy 
 RUN pip3 install pyrebase
+RUN pip3 install plot
 
 RUN pip3 install \
     Flask \
     gunicorn  
 
-CMD ["python3", "server.py"]
-CMD ["python3", "download.py"]
+#CMD ["python3", "server.py"]
+#CMD ["python3", "download.py"]
 CMD ["python3", "scenario_eval.py", "SRL_test.yml", "png"]
-CMD ["python3", "upload.py"]
-#CMD exec gunicorn --bind 0.0.0.0:8080 --workers 1 --threads 8 --timeout 0 plot:app
+#CMD ["python3", "upload.py"]
+CMD exec gunicorn --bind 0.0.0.0:8080 --workers 1 --threads 8 --timeout 0 scenario_eval:app
