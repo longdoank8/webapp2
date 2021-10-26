@@ -1101,4 +1101,4 @@ if __name__=="__main__":
         cprint("This will generate figures defined in test.yml as pdf files.", 'red')
         cprint("If $format is left empty, output files will default to png.\n", 'red')
         # cprint('Hello, World!', 'red')
-    run(yml_file, filetype)
+    run()
