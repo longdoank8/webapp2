@@ -28,9 +28,25 @@ import gplan_analysis as gplan
 matplotlib.rcParams.update({'font.size': 15})
 #
 from termcolor import colored, cprint
-#from flask import Flask
+from flask import Flask
+import pyrebase
 
-#app = Flask(__name__)
+
+config = {
+  "apiKey": "AIzaSyAq0JhOxJHz6sit5umUEfx0l6KeY6vmMOo",
+  "authDomain": "arena-web-app.firebaseapp.com",
+  "databaseURL": "https://arena-web-app-default-rtdb.europe-west1.firebasedatabase.app",
+  "projectId": "arena-web-app",
+  "storageBucket": "arena-web-app.appspot.com",
+  "messagingSenderId": "785229893630",
+  "appId": "1:785229893630:web:f6785281761b3822857aaf",
+  "measurementId": "G-JFVKSGLBG9"
+};
+
+firebase = pyrebase.initialize_app(config)
+storage = firebase.storage()
+
+app = Flask(__name__)
 
 class newBag():
     def __init__(self, planner, file_name, bag_name):
@@ -990,11 +1006,16 @@ def eval_cfg(cfg_file, filetype):
             #plt.title("Trajectories on {0}".format(map) , fontweight='bold', fontsize=16)
 
             plt.savefig(plot_file, bbox_inches = 'tight', pad_inches = 0.04,  fontsize=24)
+            path_on_cloud = "userID123/tehamsPlotxyz.png"
+            #path_local = "../plots/SRL_test.yml/map0_obs30_vel03.png"
+            storage.child(path_on_cloud).put(plot_file)
 
             # reset plot cfg to default
             plt_cfg = copy.deepcopy(default_cfg)
 
-    plt.show()
+    #plt.show()
+    target = os.environ.get('Hello')
+    return 'Hello {}! \n'.format(target)
 
 def getMap(msg):
     global ax, plot_sm, map_orig
@@ -1015,7 +1036,18 @@ def getMap(msg):
     # plt.scatter(points_y, points_x)
     sm = [points_x, points_y]
 
-def run(cfg_file, filetype):
+
+@app.route('/')
+def hello():
+   target = os.environ.get('Hello')
+   return 'Hello {}! \n'.format(target)
+
+
+
+
+
+@app.route('/plotImage')
+def run():
     global ax, sm, grid_step, select_run
     global plt_cfg
     plt_cfg = {}
@@ -1032,17 +1064,29 @@ def run(cfg_file, filetype):
     # eval_cfg("eval_run3_empty.yml")
     # eval_cfg("eval_run3_map1.yml")
     # eval_cfg("eval_test.yml")
+    path_local2 = "../bags/scenarios/run_test/mpc/"
+    path_on_cloud2 = "userID4321/mpc/map0_obs30_vel03_mpc.bag"
+    storage.child(path_on_cloud2).download(path_local2 + "/map0_obs30_vel03_mpc.bag")
+
+    path_on_cloud = "dataFolder/SRL_test.yml"
+    #storage.child(path_on_cloud).put(path_local)
+    #storage.child(path_on_cloud).download("test.yml")
+    storage.child(path_on_cloud).download("SRL_test.yml")
+
+    filetype='png'
+    cfg_file='SRL_test.yml'
     fancy_print("Start Evaluation: " + cfg_file, 0)
     eval_cfg(cfg_file, filetype)
     fancy_print("Evaluation finished: " + cfg_file, 1)
 
+    return 'plotted everything'
 
 
     #rospy.spin()
 
 if __name__=="__main__":
     
-    #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
+    app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
 
     try:
         yml_file = sys.argv[1]
