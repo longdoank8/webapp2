@@ -1051,7 +1051,7 @@ def after_request(response):
 
 
 @app.route('/plotImage')
-def run(response):
+def run():
     global ax, sm, grid_step, select_run
     global plt_cfg
     plt_cfg = {}
@@ -1084,10 +1084,7 @@ def run(response):
     fancy_print("Evaluation finished: " + cfg_file, 1)
 
 
-    response.headers.set('Access-Control-Allow-Origin', '*')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response 
+    return "plotted everything"
 
     
     
