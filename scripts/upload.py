@@ -17,7 +17,7 @@ config = {
 firebase = pyrebase.initialize_app(config)
 storage = firebase.storage()
 
-path_on_cloud = "userID123/plot4.png"
+path_on_cloud = "testuser/generatedPlot/plot4.png"
 path_local = "../plots/SRL_test.yml/map0_obs30_vel03.png"
 storage.child(path_on_cloud).put(path_local)
 #storage.child(path_on_cloud).download("test.yml")

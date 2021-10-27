@@ -1006,7 +1006,7 @@ def eval_cfg(cfg_file, filetype):
             #plt.title("Trajectories on {0}".format(map) , fontweight='bold', fontsize=16)
 
             plt.savefig(plot_file, bbox_inches = 'tight', pad_inches = 0.04,  fontsize=24)
-            path_on_cloud = "userID123/tehamsPlotxyz.png"
+            path_on_cloud = "iV8QqnuVuiZD0cI9p9KUDVA1i122/generatedPlot/plot1.png"
             #path_local = "../plots/SRL_test.yml/map0_obs30_vel03.png"
             storage.child(path_on_cloud).put(plot_file)
 
@@ -1051,7 +1051,7 @@ def after_request(response):
 
 
 @app.route('/plotImage')
-def run():
+def run(response):
     global ax, sm, grid_step, select_run
     global plt_cfg
     plt_cfg = {}
@@ -1083,7 +1083,13 @@ def run():
     eval_cfg(cfg_file, filetype)
     fancy_print("Evaluation finished: " + cfg_file, 1)
 
-    return 'plotted everything'
+
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response 
+
+    
     
 
 
