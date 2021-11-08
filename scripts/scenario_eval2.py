@@ -26,28 +26,8 @@ import os
 # gplan
 import gplan_analysis as gplan
 matplotlib.rcParams.update({'font.size': 15})
-#
+# 
 from termcolor import colored, cprint
-from flask import Flask, jsonify
-import pyrebase
-
-
-config = {
-  "apiKey": "AIzaSyAq0JhOxJHz6sit5umUEfx0l6KeY6vmMOo",
-  "authDomain": "arena-web-app.firebaseapp.com",
-  "databaseURL": "https://arena-web-app-default-rtdb.europe-west1.firebasedatabase.app",
-  "projectId": "arena-web-app",
-  "storageBucket": "arena-web-app.appspot.com",
-  "messagingSenderId": "785229893630",
-  "appId": "1:785229893630:web:f6785281761b3822857aaf",
-  "measurementId": "G-JFVKSGLBG9"
-};
-
-firebase = pyrebase.initialize_app(config)
-storage = firebase.storage()
-
-app = Flask(__name__)
-
 class newBag():
     def __init__(self, planner, file_name, bag_name):
 
@@ -85,7 +65,7 @@ class newBag():
         fn = fa[0] +"_"+ fa[1] + "_" + fa[2] + "_" + self.wpg
 
         jfile = "quantitative/" + self.planner + "_" + fn + ".json"
-        if not os.path.isfile(jfile):
+        if not os.path.isfile(jfile): 
             with open(jfile, 'w') as outfile:
                 json.dump(data, outfile, indent=2)
 
@@ -119,7 +99,7 @@ class newBag():
             # remmeber curr dir
             remember_path = os.path.abspath(os.curdir)
             # change to map dir
-            os.chdir("../simulator_setup/maps/"+map)
+            os.chdir("../../../../simulator_setup/maps/"+map)
             path_map = os.path.abspath(os.curdir)
             # move back to eval path
             os.chdir(remember_path)
@@ -128,9 +108,9 @@ class newBag():
             orig_x = map_yml["origin"][0]
             orig_y = map_yml["origin"][1]
 
-            for i in range(len(df_sm)):
+            for i in range(len(df_sm)): 
                 df_str = (df_sm.loc[i,"markers"])
-                df_str = df_str.split("points:")[1]
+                df_str = df_str.split("points:")[1] 
                 df_str = df_str.split("colors: []")[0]
                 df_str = df_str.replace("z: 0.0","")
                 df_str = df_str.replace("  - ","")
@@ -154,7 +134,7 @@ class newBag():
                     except Exception as e:
                         print(e)
 
-
+            
             img = plt.imread(path_map+"/map.png")
             # plt.imshow(img, extent=[-16, -50, -6, 17])
             plt.scatter(points_x, points_y, s = 0.2, c = "grey")
@@ -194,17 +174,17 @@ class newBag():
 
 
         t_col = []
-
+   
         try:
-            for i in range(len(df_collision)):
-                t_col.append(df_collision.loc[i, "Time"])
-
+            for i in range(len(df_collision)): 
+                t_col.append(df_collision.loc[i, "Time"])   
+                
             self.nc_total = len(t_col)
             # get reset time
             reset_csv = self.bag.message_by_topic("/scenario_reset")
             df_reset  = pd.read_csv(reset_csv, error_bad_lines=False)
             t_reset   = []
-            for i in range(len(df_reset)):
+            for i in range(len(df_reset)): 
                 t_reset.append(df_reset.loc[i, "Time"])
 
             # subgoals
@@ -228,7 +208,7 @@ class newBag():
             # collsion pos
             col_xy = []
             nc = 0
-
+            
             old_x = None
             old_y = None
             dist2_oldp = 2500
@@ -236,7 +216,7 @@ class newBag():
 
             global start, select_run
 
-            for i in range(len(df_odom)):
+            for i in range(len(df_odom)): 
                 current_time = df_odom.loc[i, "Time"]
                 x = df_odom.loc[i, "pose.pose.position.x"]
                 x = round(x,2)
@@ -254,7 +234,7 @@ class newBag():
                 # print(reset)
 
                 # check if respawned
-
+                
                 start_x = start[0] + 0.5
 
                 dist2_oldp = 0
@@ -273,7 +253,7 @@ class newBag():
                         bags["run_"+str(n)] = [pose_x, pose_y, t, col_xy, subgoal_x, subgoal_y, wpg_x, wpg_y, vel_total]
 
 
-                    # reset
+                    # reset 
                     wpg_x     = []
                     wpg_y     = []
 
@@ -297,7 +277,7 @@ class newBag():
                     #     pose_x.append(x)
                     #     pose_y.append(y)
                     # print("run_"+str(n))
-
+                   
                     pose_x.append(x)
                     pose_y.append(y)
                     vel_total.append(v_total)
@@ -340,23 +320,23 @@ class newBag():
                     old_y = y
 
 
-            # remove first
-            #if "run_1" in bags:
+            # remove first 
+            #if "run_1" in bags:    
                 #bags.pop("run_1")
 
             df = pd.DataFrame(data=bags)
             run_csv = self.csv_dir + "/" + self.csv_dir.rsplit('/', 1)[-1] + ".csv"
-            df.to_csv(run_csv,index=False)
-            print("csv created in: " + self.csv_dir)
+            df.to_csv(run_csv,index=False)   
+            print("csv created in: " + self.csv_dir)  
         except Exception as e:
             # otherwise run had zero collisions
             print(e)
             bags = {}
         return bags
-
-    def average(self,lst):
+    
+    def average(self,lst): 
         if len(lst)>0:
-            return sum(lst) / len(lst)
+            return sum(lst) / len(lst) 
         else:
              return 0
 
@@ -364,9 +344,9 @@ class newBag():
         global plt_cfg
 
         if plt_cfg["plot_gp"] and self.plot_gp:
-            csv_dir = self.csv_dir
+            csv_dir = self.csv_dir 
             # print(csv_dir+"/scenario_reset.csv")
-            if os.path.isfile(csv_dir+"/sensorsim-police-gplan.csv") and os.path.isfile(csv_dir+"/scenario_reset.csv"):
+            if os.path.isfile(csv_dir+"/sensorsim-police-gplan.csv") and os.path.isfile(csv_dir+"/scenario_reset.csv"): 
                 esdf = gplan.gplan_to_df(csv_dir+"/sensorsim-police-gplan.csv", csv_dir+"/scenario_reset.csv")
                 gplan.plot_run(esdf, run_n, "tab:cyan",pwp)
                 self.plot_gp = False
@@ -397,19 +377,19 @@ class newBag():
                 if plt_cfg["plot_collisions"]:
                     circle = plt.Circle((-col_xy[1], col_xy[0]), 0.3, color=clr, fill = True, alpha = 0.6)
                     ax.add_patch(circle)
-
+                    
                 col_exists = True
-
+        
 
         if col_exists:
             self.make_grid([all_cols_x, all_cols_y], clr)
 
-    def fancy_plot(self, x, y, vels,skip, mode):
+    def fancy_plot(self, x, y, vels,skip, mode): 
         if mode == True:
             n = 50
             colors  = plt.cm.jet(np.linspace(0,1,n))
             vel_map = np.linspace(0,0.5,n)
-
+            
             print(vels)
 
             idx = 0
@@ -419,7 +399,7 @@ class newBag():
             while idx < len(x):
                 mid     = min(range(len(vel_map)), key=lambda i: abs(vel_map[i]-vels[idx]))
                 if joined == skip or idx == len(x) - 1:
-                    plt.plot(xi, yi, "-",color=colors[mid])
+                    plt.plot(xi, yi, "-",color=colors[mid]) 
                     # plt.scatter(xi, yi, marker='+')
                     # plt.scatter(xi, yi, marker='+')
                     xi = []
@@ -441,7 +421,7 @@ class newBag():
         col_xy = []
         global ax, axlim, plt_cfg, line_clr, line_stl
 
-        durations = []
+        durations = [] 
         trajs = []
         av_vels = []
 
@@ -478,7 +458,7 @@ class newBag():
                 wp_x =  np.array(wp_x)
                 wp_y = -np.array(wp_y)
                 vels =  np.array(vels)
-
+                
                 # print(wp_x)
                 # print(wp_y)
 
@@ -492,11 +472,11 @@ class newBag():
                     axlim["y_min"] = min(pose_y)
                 if max(pose_y) > axlim["y_max"]:
                     axlim["y_max"] = max(pose_y)
-
+                
                 t = bags[run][2]
 
                 dist_array = (x[:-1]-x[1:])**2 + (y[:-1]-y[1:])**2
-                path_length = np.sum(np.sqrt(dist_array))
+                path_length = np.sum(np.sqrt(dist_array)) 
                 # for av
                 trajs.append(path_length)
 
@@ -518,14 +498,14 @@ class newBag():
                     elif len(sg_y) > 0 and len(sg_x) > 0:
                         pwp = False
                         ax.plot(sg_y, sg_x, "^", color='k', alpha=0.2)
-
+                    
 
                 duration = t[len(t)-1] - t[0]
                 # for av
                 durations.append(duration)
                 av_vel = path_length/duration
                 # for av
-
+                
 
                 n_col = len(bags[run][3])
 
@@ -567,7 +547,7 @@ class newBag():
         print("average path length: ", round(self.average(trajs),3), "m")
         print("average velocity:    ", round(self.average(av_vels),3), " m/s")
         print("total collisions:    ",   str(self.nc_total))
-
+        
         # average to txt (summary)
         # self.make_txt(file_name,msg_planner) -- txt
         # self.make_txt(file_name,msg_at)
@@ -587,10 +567,10 @@ class newBag():
         for arr in ca:
             for point in arr:
                 all_col_pts.append(point)
-
+        
         if len(all_col_pts) > 0:
             X = np.array(all_col_pts)
-
+            
             cluster = AgglomerativeClustering(n_clusters=5, affinity='euclidean', linkage='ward')
             cluster.fit_predict(X)
             plt.scatter(-X[:,1],X[:,0], c=cluster.labels_, cmap='rainbow')
@@ -602,12 +582,12 @@ class newBag():
         global ax, plt_cfg, grid_step
 
         # max grid size
-        cx_min = min(acxy[0])
-        cx_max = max(acxy[0])
-        cy_min = min(acxy[1])
-        cy_max = max(acxy[1])
+        cx_min = min(acxy[0]) 
+        cx_max = max(acxy[0]) 
+        cy_min = min(acxy[1]) 
+        cy_max = max(acxy[1]) 
 
-        # rect p1
+        # rect p1 
         rcta_p1_x = cx_min - 0.5
         rcta_p1_y = cy_min - 0.5
         # rect p2
@@ -630,11 +610,11 @@ class newBag():
         n_grid_cells = (int(rcta_p2_x/grid_step), int(rcta_p2_y/grid_step))
         # grid  = np.zeros(n_grid_cells, dtype=np.ndarray)
         cells = np.zeros(n_grid_cells, dtype=np.ndarray)
-
+        
         rows = np.shape(cells)[0]
-        cols = np.shape(cells)[1]
-
-        # array iteration
+        cols = np.shape(cells)[1]  
+        
+        # array iteration 
         j = 0
         i = 0
         # total cells
@@ -642,7 +622,7 @@ class newBag():
         n_cell = 0
         cells_filled = False
         # for i in range(rows):
-        while not cells_filled:
+        while not cells_filled: 
 
             # corner pts of each cell
             x1 = round(grid_step*i+rcta_p1_x,2)
@@ -656,14 +636,14 @@ class newBag():
 
             x4 = round(grid_step*(i+1)+rcta_p1_x,2)
             y4 = round(grid_step*j+rcta_p1_y,2)
-
-            # add coordinates
+            
+            # add coordinates 
             n_cell += 1
             cells[i][j] = [n_cell ,x1, y1, x2, y2, x3, y3, x4, y4]
 
 
             if plt_cfg["plot_grid"]:
-                # plot coordinates
+                # plot coordinates 
                 circle = plt.Circle((x1, y1), 0.1, color=clr, fill = True, alpha = 1)
                 ax.add_patch(circle)
                 circle = plt.Circle((x2, y2), 0.1, color=clr, fill = True, alpha = 1)
@@ -675,7 +655,7 @@ class newBag():
 
                 rcta = plt.Rectangle((rcta_p1_x, rcta_p1_y), rcta_p2_x, rcta_p2_y, linewidth=2, edgecolor=clr, facecolor='none')
                 ax.add_patch(rcta)
-
+            
             i += 1
             # row completed
             if i == rows:
@@ -693,7 +673,7 @@ class newBag():
         zones = {}
 
         for i in range(len(acxy[0])):
-
+            
             # collision coords
             x = acxy[0][i]
             y = acxy[1][i]
@@ -714,7 +694,7 @@ class newBag():
 
                     p_x4 = cell[7]
                     p_y4 = cell[8]
-
+                    
                     # check if collision in cell
                     if p_x1 <= x and p_y1 <= y and  p_x2 <= x and p_y2 >= y and p_x3 >= x and p_y3 >= y and p_x4 >= x and p_y4 <= y:
                         if cell_nr in zones:
@@ -733,7 +713,7 @@ class newBag():
 
 
                     # print(i, nof_cols)
-
+        
 
         print("---------------------")
 
@@ -752,7 +732,7 @@ class newBag():
         if plt_cfg["plot_zones"]:
             for i in zones:
                 nof_cols = len(zones[i])
-
+                
                 if nof_cols > 0 and isinstance(i, str):
                     filtered_zones[i] = zones[i]
                     filtered_zones[i+"n"] = nof_cols
@@ -768,7 +748,7 @@ class newBag():
         while True:
             for i in filtered_zones:
 
-                if "c" in i and not "n" in i:
+                if "c" in i and not "n" in i: 
                     center = filtered_zones[i]
 
                     # construct adjacent cells
@@ -792,7 +772,7 @@ class newBag():
 
                     for ad in adj_cells:
                         key  = str(ad)+"_c"
-                        # check if
+                        # check if 
                         if key in filtered_zones:
                             ad_c = filtered_zones[key]
 
@@ -824,9 +804,9 @@ def fancy_print(msg,success):
 def plot_arrow(start,end):
     global ax
     # ax.arrow(-start[1], start[0], -end[1], end[0], head_width=0.05, head_length=0.1, fc='k', ec='k')
-    plt.arrow(start[0], start[1], end[0], end[1],
-        head_width = 0.2,
-        width = 0,
+    plt.arrow(start[0], start[1], end[0], end[1],  
+        head_width = 0.2, 
+        width = 0, 
         ec = "black",
         fc = "black",
         ls ="-")
@@ -840,14 +820,11 @@ def plot_dyn_obst(ob_xy):
 def read_scn_file(map, ob):
     # gets start / goal of each scenario as global param
     global start, goal, plt_cfg
-    # find json path
-    # rospack = rospkg.RosPack()
-    # json_path = rospack.get_path('simulator_setup')+'/scenarios/eval/'
 
     # remmeber curr dir
     remember_path = os.path.abspath(os.curdir)
     # change to map dir
-    os.chdir("../simulator_setup/scenarios/eval/")
+    os.chdir("../../../../simulator_setup/scenarios/eval/")
     json_path = os.path.abspath(os.curdir)
     # move back to eval path
     os.chdir(remember_path)
@@ -858,43 +835,64 @@ def read_scn_file(map, ob):
             jf = file
     # read file
     with open(json_path+"/"+jf, 'r') as myfile:
-        data= myfile.read()
+        data=myfile.read()
     obj = json.loads(data)
 
     # json to dict
     for i in obj:
         for l in obj[i]:
             data = l
-
+    
     # get json data
-    for do in data["dynamic_obstacles"]:
-        sp   = data["dynamic_obstacles"][do]["start_pos"]
-        sp_x = sp[0]
-        sp_y = sp[1]
+    # for do in data["dynamic_obstacles"]:
+    #     sp   = data["dynamic_obstacles"][do]["start_pos"]
+    #     sp_x = sp[0]
+    #     sp_y = sp[1]
 
-        wp   = data["dynamic_obstacles"][do]["waypoints"][0]
-        wp_x = wp[0]
-        wp_y = wp[1]
+    #     wp   = data["dynamic_obstacles"][do]["waypoints"][0]
+    #     wp_x = wp[0]
+    #     wp_y = wp[1]
+        
+    #     ep_x = sp_x + wp_x
+    #     ep_y = sp_y + wp_y
+    #     ep   = [ep_x, ep_y]
 
-        ep_x = sp_x + wp_x
-        ep_y = sp_y + wp_y
-        ep   = [ep_x, ep_y]
+    #     if plt_cfg["plot_obst"]:
+    #         plot_dyn_obst(sp)
+    #         plot_dyn_obst(ep)
+    #         plot_arrow(sp,wp)
 
-        if plt_cfg["plot_obst"]:
-            plot_dyn_obst(sp)
-            plot_dyn_obst(ep)
-            plot_arrow(sp,wp)
+    for do in data["pedsim_agents"]:
+            sp   = data["pedsim_agents"][do]["pos"]
+            wp_x = []
+            wp_y = []
+            wp = []
+            for i in range(len(data["pedsim_agents"][do]["waypoints"])):
+                wp_x[i] = data["pedsim_agents"][do]["waypoints"][i][0]
+                wp_y[i] = data["pedsim_agents"][do]["waypoints"][i][1]
+                wp[i]   = [wp_x[i], wp_y[i]]
+                if plt_cfg["plot_obst"]:
+                    if range(len(do["waypoints"])) > 1:
+                        plot_dyn_obst(sp)
+                        plot_arrow[sp, wp[0]]
+                        plot_arrow(wp[i],wp[i+1])
+                    else: 
+                        plot_dyn_obst(sp)
+                        plot_arrow(sp,wp[i])
 
+        
+    # start = data["robot"]["start_pos"]
+    # goal  = data["robot"]["goal_pos"]
 
-    start = data["robot"]["start_pos"]
-    goal  = data["robot"]["goal_pos"]
+    start = data["robot_position"]
+    goal  = data["robot_goal"]
 
 def eval_cfg(cfg_file, filetype):
     global ax, plot_sm, start, goal, axlim, plt_cfg, line_clr, line_stl
 
-    cur_path    = str(pathlib.Path().absolute())
+    cur_path    = str(pathlib.Path().absolute()) 
     parent_path = str(os.path.abspath(os.path.join(cur_path, os.pardir)))
-
+    
     fancy_print("loading config: " + cfg_file, 0)
     # load default config
     with open(cfg_file, "r") as ymlfile:
@@ -905,7 +903,7 @@ def eval_cfg(cfg_file, filetype):
 
 
     plt_cfg  = copy.deepcopy(default_cfg)
-
+  
     for curr_figure in cfg:
         # plot file name
         cfg_folder = cfg_file
@@ -913,7 +911,7 @@ def eval_cfg(cfg_file, filetype):
         if not os.path.exists('../plots/' + cfg_folder):
             os.mkdir('../plots/' + cfg_folder)
 
-        plot_file        = '../plots/' + cfg_folder + "/" + curr_figure + "." + filetype
+        plot_file        = '../plots/' + cfg_folder + "/" + curr_figure + "." + filetype 
         # plot_file_exists = os.path.isfile(plot_file)
         plot_file_exists = False
         # print(curr_figure)
@@ -922,7 +920,7 @@ def eval_cfg(cfg_file, filetype):
                 plt_cfg[param] = cfg[curr_figure][param]
             # print("----------------")
             # pp.pprint(plt_cfg)
-
+        
         elif "default" not in curr_figure and not plot_file_exists:
             fig, ax  = plt.subplots(figsize=(6, 7))
 
@@ -930,8 +928,8 @@ def eval_cfg(cfg_file, filetype):
             map  = ca[0]
             ob   = ca[1]
             vel  = ca[2]
-            read_scn_file(map, ob)
-            mode =  map + "_" + ob + "_" + vel
+            read_scn_file(map, ob) 
+            mode =  map + "_" + ob + "_" + vel 
             fig.canvas.set_window_title(curr_figure)
 
             legend_elements = []
@@ -961,7 +959,7 @@ def eval_cfg(cfg_file, filetype):
 
                 model   = plot_param["model"]
                 style   = plot_param["linestyle"]
-
+    
 
                 # print(planner, dir, model, style, wpg)
 
@@ -987,11 +985,11 @@ def eval_cfg(cfg_file, filetype):
                     if file.endswith(".bag") and file_match:
 
                         fancy_print("Evaluate bag: " + file, 0)
-                        planner_wpg = planner.split("_")[0] + "wpg" + wpg
+                        planner_wpg = planner.split("_")[0] + "wpg" + wpg 
                         newBag(planner_wpg, curr_figure, curr_bag + "/" + file)
                         fancy_print("Evaluate bag: " + file, 1)
 
-
+            
             #map0: lower left, empty: upper left, open: lower left
             ax.legend(handles=legend_elements, loc="lower left")
 
@@ -1006,17 +1004,11 @@ def eval_cfg(cfg_file, filetype):
             #plt.title("Trajectories on {0}".format(map) , fontweight='bold', fontsize=16)
 
             plt.savefig(plot_file, bbox_inches = 'tight', pad_inches = 0.04,  fontsize=24)
-            #path_on_cloud = "iV8QqnuVuiZD0cI9p9KUDVA1i122/generatedPlot/plot1.png" this line worked 
-            path_on_cloud = "userID123/testplot.png"
-            #path_local = "../plots/SRL_test.yml/map0_obs30_vel03.png"
-            storage.child(path_on_cloud).put(plot_file)
 
             # reset plot cfg to default
             plt_cfg = copy.deepcopy(default_cfg)
 
-    #plt.show()
-    target = os.environ.get('Hello')
-    return 'Hello {}! \n'.format(target)
+    plt.show()
 
 def getMap(msg):
     global ax, plot_sm, map_orig
@@ -1037,22 +1029,7 @@ def getMap(msg):
     # plt.scatter(points_y, points_x)
     sm = [points_x, points_y]
 
-
-@app.route('/')
-def hello():
-   return jsonify(hello='world')
-    
-@app.after_request
-def after_request(response):        
-    response.headers.set('Access-Control-Allow-Origin', '*')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response 
-
-
-
-@app.route('/plotImage')
-def run():
+def run(cfg_file, filetype):
     global ax, sm, grid_step, select_run
     global plt_cfg
     plt_cfg = {}
@@ -1060,44 +1037,24 @@ def run():
     select_run = []
 
     grid_step  = 2
-
+        
     # static map
     #rospy.init_node("eval", disable_signals=True)
     #rospy.Subscriber('/flatland_server/debug/layer/static',MarkerArray, getMap)
-
+    
 
     # eval_cfg("eval_run3_empty.yml")
     # eval_cfg("eval_run3_map1.yml")
     # eval_cfg("eval_test.yml")
-    path_local2 = "../bags/scenarios/run_test/mpc/"
-    path_on_cloud2 = "userID4321/mpc/map0_obs30_vel03_mpc.bag"
-    storage.child(path_on_cloud2).download(path_local2 + "/map0_obs30_vel03_mpc.bag")
-
-    #path_on_cloud = "iV8QqnuVuiZD0cI9p9KUDVA1i122/SRL_test.yml" #works with subhin actual url link
-    path_on_cloud = "dataFolder/SRL_test.yml"
-    #storage.child(path_on_cloud).put(path_local)
-    #storage.child(path_on_cloud).download("test.yml")
-    storage.child(path_on_cloud).download("SRL_test.yml")
-
-    filetype='png'
-    cfg_file='SRL_test.yml'
     fancy_print("Start Evaluation: " + cfg_file, 0)
     eval_cfg(cfg_file, filetype)
     fancy_print("Evaluation finished: " + cfg_file, 1)
-
-
-    return "plotted everything"
-
-    
-    
 
 
 
     #rospy.spin()
 
 if __name__=="__main__":
-    
-    app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
 
     try:
         yml_file = sys.argv[1]
@@ -1112,4 +1069,4 @@ if __name__=="__main__":
         cprint("This will generate figures defined in test.yml as pdf files.", 'red')
         cprint("If $format is left empty, output files will default to png.\n", 'red')
         # cprint('Hello, World!', 'red')
-    run()
+    run(yml_file, filetype)
